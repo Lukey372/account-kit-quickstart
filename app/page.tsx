@@ -21,7 +21,7 @@ export default function Home() {
         <div className="flex flex-col gap-2 p-6 bg-white rounded-lg shadow-md">
           <p className="text-2xl font-bold text-gray-800">Success!</p>
           <p className="text-gray-600">
-            You're logged in as {user.email ?? "anon"}.
+            You&apos;re logged in as {user.email ?? "anon"}.
           </p>
           <Button 
             onClick={() => logout()}
