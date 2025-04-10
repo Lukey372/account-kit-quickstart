@@ -1,7 +1,7 @@
 import { Connection, PublicKey, Transaction, SystemProgram, LAMPORTS_PER_SOL } from '@solana/web3.js';
 
-// Initialize connection to Solana devnet
-export const connection = new Connection('https://api.devnet.solana.com', 'confirmed');
+// Initialize connection to Solana mainnet
+export const connection = new Connection('https://solana-mainnet.g.alchemy.com/v2/_EG9_ioKKYgIJhAE_eOfcLhXOh7bzRgx', 'confirmed');
 
 // Get account balance
 export const getBalance = async (publicKey: PublicKey): Promise<number> => {
@@ -33,16 +33,4 @@ export const createTransferTransaction = async (
   transaction.feePayer = fromPubkey;
 
   return transaction;
-};
-
-// Request airdrop
-export const requestAirdrop = async (publicKey: PublicKey): Promise<string> => {
-  try {
-    const signature = await connection.requestAirdrop(publicKey, LAMPORTS_PER_SOL);
-    await connection.confirmTransaction(signature);
-    return signature;
-  } catch (error) {
-    console.error('Error requesting airdrop:', error);
-    throw error;
-  }
 };
