@@ -19,7 +19,7 @@ const uiConfig: AlchemyAccountsUIConfig = {
       [
         {
           type: "external_wallets",
-          walletConnect: { projectId: "your-project-id" },
+          walletConnect: { projectId: "cbd8f3b977ec6450d683560d866260ac" },
         },
       ],
     ],
