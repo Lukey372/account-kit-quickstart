@@ -2,12 +2,13 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { PublicKey } from '@solana/web3.js';
-import { getBalance, requestAirdrop } from '@/lib/solana';
+import { getBalance } from '@/lib/solana';
 import { Button } from '@/components/ui/button';
+import { useWallet } from '@solana/wallet-adapter-react';
 
 export default function SolanaWallet({ publicKey }: { publicKey: string }) {
   const [balance, setBalance] = useState<number | null>(null);
-  const [loading, setLoading] = useState(false);
+  const { disconnect } = useWallet();
 
   const fetchBalance = useCallback(async () => {
     try {
@@ -25,22 +26,9 @@ export default function SolanaWallet({ publicKey }: { publicKey: string }) {
     }
   }, [publicKey, fetchBalance]);
 
-  const handleAirdrop = async () => {
-    try {
-      setLoading(true);
-      const pubKey = new PublicKey(publicKey);
-      await requestAirdrop(pubKey);
-      await fetchBalance();
-    } catch (error) {
-      console.error('Error requesting airdrop:', error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
   return (
-    <div className="p-6 bg-white rounded-lg shadow-md">
-      <h2 className="text-2xl font-bold mb-4">Solana Wallet</h2>
+    <div className="p-6 bg-white rounded-lg shadow-md w-full max-w-md">
+      <h2 className="text-2xl font-bold mb-4">Your Wallet</h2>
       <div className="mb-4">
         <p className="text-sm text-gray-600">Public Key</p>
         <p className="font-mono text-sm break-all">{publicKey}</p>
@@ -50,11 +38,11 @@ export default function SolanaWallet({ publicKey }: { publicKey: string }) {
         <p className="text-xl font-bold">{balance !== null ? `${balance} SOL` : 'Loading...'}</p>
       </div>
       <Button
-        onClick={handleAirdrop}
-        disabled={loading}
+        onClick={() => disconnect()}
+        variant="outline"
         className="w-full"
       >
-        {loading ? 'Requesting...' : 'Request Airdrop (1 SOL)'}
+        Disconnect Wallet
       </Button>
     </div>
   );
