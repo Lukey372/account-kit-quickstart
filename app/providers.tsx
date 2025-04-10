@@ -17,7 +17,6 @@ export const Providers = (
     () => [
       new PhantomWalletAdapter(),
       new SolflareWalletAdapter(),
-      new BackpackWalletAdapter()
     ],
     []
   );
