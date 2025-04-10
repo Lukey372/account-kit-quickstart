@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { PublicKey } from '@solana/web3.js';
 import { getBalance, requestAirdrop } from '@/lib/solana';
 import { Button } from '@/components/ui/button';
@@ -9,13 +9,7 @@ export default function SolanaWallet({ publicKey }: { publicKey: string }) {
   const [balance, setBalance] = useState<number | null>(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    if (publicKey) {
-      fetchBalance();
-    }
-  }, [publicKey]);
-
-  const fetchBalance = async () => {
+  const fetchBalance = useCallback(async () => {
     try {
       const pubKey = new PublicKey(publicKey);
       const bal = await getBalance(pubKey);
@@ -23,7 +17,13 @@ export default function SolanaWallet({ publicKey }: { publicKey: string }) {
     } catch (error) {
       console.error('Error fetching balance:', error);
     }
-  };
+  }, [publicKey]);
+
+  useEffect(() => {
+    if (publicKey) {
+      fetchBalance();
+    }
+  }, [publicKey, fetchBalance]);
 
   const handleAirdrop = async () => {
     try {
