@@ -1,34 +1,33 @@
 "use client";
-import {
-  useAuthModal,
-  useLogout,
-  useSignerStatus,
-  useUser,
-} from "@account-kit/react";
+
+import { useState } from 'react';
+import { Keypair } from '@solana/web3.js';
+import SolanaWallet from '@/components/SolanaWallet';
+import { Button } from '@/components/ui/button';
 
 export default function Home() {
-  const user = useUser();
-  const { openAuthModal } = useAuthModal();
-  const signerStatus = useSignerStatus();
-  const { logout } = useLogout();
+  const [wallet, setWallet] = useState<Keypair | null>(null);
+
+  const createWallet = () => {
+    const newWallet = Keypair.generate();
+    setWallet(newWallet);
+  };
 
   return (
-    <main className="flex min-h-screen flex-col items-center p-24 gap-4 justify-center text-center">
-      {signerStatus.isInitializing ? (
-        <>Loading...</>
-      ) : user ? (
-        <div className="flex flex-col gap-2 p-2">
-          <p className="text-xl font-bold">Success!</p>
-          Logged in as {user.email ?? "anon"}.
-          <button className="btn btn-primary mt-6" onClick={() => logout()}>
-            Log out
-          </button>
-        </div>
-      ) : (
-        <button className="btn btn-primary" onClick={openAuthModal}>
-          Login
-        </button>
-      )}
+    <main className="min-h-screen p-8">
+      <div className="max-w-2xl mx-auto">
+        <h1 className="text-4xl font-bold mb-8 text-center">Solana Wallet Demo</h1>
+        
+        {!wallet ? (
+          <div className="text-center">
+            <Button onClick={createWallet} className="mx-auto">
+              Create New Wallet
+            </Button>
+          </div>
+        ) : (
+          <SolanaWallet publicKey={wallet.publicKey.toString()} />
+        )}
+      </div>
     </main>
   );
 }
